@@ -49,16 +49,18 @@ app.get('/', (req, res) => {
 
 // show article by this slug
 app.get('/article/:slug', (req, res) => {
-    let query = 'SELECT * FROM article WHERE slug="${req.params.slug}"'
+    let query = `SELECT article.id, article.name, article.slug, article.image, article.body, article.published, author.name as author from article JOIN author ON article.author_id = author.id where slug = "${req.params.slug}";`
+    // let query = `SELECT * FROM article where slug = "${req.params.slug}"`
     let article
     con.query(query, (err, result) => {
         if (err) throw err;
-        article = result
+        article = result;
         res.render('article', {
             article: article
         })
-    });
-});
+    })
+})
+
 
 // app start point
 app.listen(3000, () => {
